@@ -1,16 +1,25 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
+/* 
+ * TRABALHO 1 - Squares
+ * Nome: Juliano Leonardo Soares
+ * Matricula: 201713854
+ * Disciplina: Lógica e Algoritmo
+ * Professor: Dr. Joaquim Assunção
+ */
 
+// Variavel global para a matriz
 char matriz[7][7];
 
+// Função para escrever o nome do GAME no menu inicial
 void desenhaNomeGame() {
   int valor;
   for(int i = 0; i < 25; i++){
     printf("_");
   }
   printf("\n");
-  printf("\n\tSQUARE\n");
+  printf("\n\tSQUARES\n");
   for(int i = 0; i < 25; i++){
     printf("_");
   }
@@ -21,6 +30,7 @@ void desenhaNomeGame() {
   printf("\n");
 }
 
+// Função para escrever as instruções no terminal
 void mostraInstrucoes() {
   printf("\n");
   printf("\t INSTRUCOES \n");
@@ -39,6 +49,7 @@ void mostraInstrucoes() {
   printf("\n");
 }
 
+// Função que desenha a matriz durante o game
 void desenhaMatriz() {
   int i, j;
   printf ("\n");
@@ -53,80 +64,94 @@ void desenhaMatriz() {
   }
 }
 
-void movePeca(char valor) {
+// função para mover as peças pela matriz
+void movePeca(char peca) {
+  // variaveis para mover a peça no eixoX e eixoY
+  // y_atual e x_atual representam a posição atual da peça
   int eixoX, eixoY, y_atual, x_atual;
   printf ("Digite posição da peca:\nEixo X(Vertical):\n");
-  scanf("%d", &eixoX);
+  scanf("%d", &eixoX); // faz a leitura da posição para mover no eixoX
   printf ("Eixo Y(horizontal):\n");
-  scanf("%d", &eixoY);
+  scanf("%d", &eixoY); // faz a leitura da posição para mover no eixoY 
 
+  // Verifica se as novas posições estão dentro da matriz
+  // caso contrario retorna
   if(eixoY >=7 || eixoY < 0 || eixoX >= 7 || eixoX < 0) {
     printf ("--> O valor dos eixo X ou Y devem ser entre 0 e 6\n");
     return;
   }
 
+  // verifica se na nova posição a ser ocupada esta vazia
   if(matriz[eixoX][eixoY] != '+') {
-    printf("A posição ja esta ocupada!!\n");
+    printf("\n--> A posição ja esta ocupada!!\n");
     return;
   }
 
+  // pega a posição atual da peça a ser movida 
+  // para futuraamente deixar com '+' no lugar
   for (int i = 0; i < 7; i++){
     for(int j = 0; j < 7; j++){
-      if(matriz[i][j] == valor){
+      if(matriz[i][j] == peca){
         y_atual = j;
         x_atual = i;
       }
     }
   }
 
-  if(valor == 'A' && 
+  // Verifica a movimentação de A
+  if(peca == 'A' && 
     ((eixoX == x_atual - 1 && eixoY == y_atual) ||
      (eixoX == x_atual && eixoY == y_atual + 1) || 
      (eixoX == x_atual && eixoY == y_atual - 1))
   ){
-    matriz[eixoX][eixoY] = valor;
+    matriz[eixoX][eixoY] = peca;
     matriz[x_atual][y_atual] = '+';
     return;
   }
 
-  if(valor == 'L' && 
-    (eixoX == x_atual - 1 && eixoY == y_atual - 1) ||
+  // Verifica a movimentação de L
+  if(peca == 'L' && 
+    ((eixoX == x_atual - 1 && eixoY == y_atual - 1) ||
     (eixoX == x_atual - 1 && eixoY == y_atual + 1) ||
     (eixoX == x_atual + 1 && eixoY == y_atual - 1) ||
-    (eixoX == x_atual + 1 && eixoY == y_atual + 1)  
+    (eixoX == x_atual + 1 && eixoY == y_atual + 1))  
   ){
-    matriz[eixoX][eixoY] = valor;
+    matriz[eixoX][eixoY] = peca;
     matriz[x_atual][y_atual] = '+';
     return;
   }
   
-  if(valor == 'M' && 
-    (eixoX == x_atual && eixoY == y_atual - 2) ||
-    (eixoX == x_atual && eixoY == y_atual + 2) ||
+  // Verifica a movimentação de M
+  if(peca == 'M' && (
     (eixoX == x_atual + 2 && eixoY == y_atual) ||
-    (eixoX == x_atual + 2 && eixoY == y_atual)  
-  ){
-    matriz[eixoX][eixoY] = valor;
+    (eixoX == x_atual - 2 && eixoY == y_atual) ||
+    (eixoX == x_atual && eixoY == y_atual + 2) ||
+    (eixoX == x_atual && eixoY == y_atual - 2)
+  )){
+    matriz[eixoX][eixoY] = peca;
     matriz[x_atual][y_atual] = '+';
     return;
   }
 
-  if((valor == 'k'|| valor == 'K') &&
-    (eixoX == x_atual - 1 && eixoY == y_atual - 1) ||
-    (eixoX == x_atual - 1 && eixoY == y_atual + 1) ||
+  // Verifica a movimentação de K ou k
+  if((peca == 'k'|| peca == 'K') &&
+    ((eixoX == x_atual - 3 && eixoY == y_atual - 3) ||
+    (eixoX == x_atual - 3 && eixoY == y_atual + 3) ||
     (eixoX == x_atual - 3 && eixoY == y_atual) ||
     (eixoY == y_atual - 3 && eixoX == x_atual) ||
-    (eixoY == y_atual + 3 && eixoX == x_atual) 
+    (eixoY == y_atual + 3 && eixoX == x_atual)) 
   ){
-    matriz[eixoX][eixoY] = valor;
+    matriz[eixoX][eixoY] = peca;
     matriz[x_atual][y_atual] = '+';
     return;
   }
 
-  printf("\nMovimento errado para '%c'\n\n", valor);
-  
+  // se não entrou em nenhuma das movimentação o movimento está errado
+  printf("\nMovimento errado para '%c'\n\n", peca);
+  return;  
 }
 
+// função para iniciar as peças nas posições corretas
 void iniciaVariaveis() {
   int i, j;
   for ( i=0; i<7; i++ ){
@@ -142,14 +167,15 @@ void iniciaVariaveis() {
   matriz[6][6] = 'k';
 }
 
+// função que inicia o Game
 void iniciaGame() {
-  char valor;
-  while(true){
+  char valor = ' '; // peça a ser movida
+  while(true){ // enquanto true o game executa, até que o 0 é digitado e retorna para o menu
     desenhaMatriz(matriz);
     printf ("\nDigite a peça que deseja mover:\n(K, A, L, M, k)\n");
-    getchar();
+    setbuf(stdin, NULL); // limpar buffer
     scanf("%c", &valor);
-    switch(valor)
+    switch(valor)// escolha da peça e movimenta
     {
       case 'K' :  
         movePeca(valor);
@@ -168,27 +194,28 @@ void iniciaGame() {
         break;
       case '0' : 
         return;
+      default:
+        printf ("\n--> Valor invalido!\nObs: as letras devem ser maiusculas\nO K tem maiuscula e minuscula e sao pecas diferentes com movimentos iguais.\n");
         break;
-      default :
-        printf ("Valor invalido!\nObs: as letras devem ser maiusculas\no K tem maiuscula e minuscula e sao pecas diferentes com movimentos iguais.\n");
     }
   }
 }
 
+// função para desenhar o menu
 void desenhaMenuGame() {
-  int valor = 0;
+  int opcao = 0; // opção para escolha no menu
   while(true){
-    desenhaNomeGame();
+    desenhaNomeGame(); // chama para desenhar o nome do game
     printf ("Digite uma opção: \n");
-    scanf("%d", &valor);
-    switch(valor)
+    scanf("%d", &opcao);
+    switch(opcao) // opção para escolha no menu
     {
       case 1 :
-        iniciaVariaveis();
-        iniciaGame();
+        iniciaVariaveis(); // chama para iniciar as variaveis
+        iniciaGame(); // inicia o game
         break;
       case 2 :
-        mostraInstrucoes();
+        mostraInstrucoes(); // chama descreve instruções
         break;
       case 3 :
         return;
@@ -200,6 +227,6 @@ void desenhaMenuGame() {
 }
 
 int main (void) { //Inicia menu inicial do game
-  desenhaMenuGame();
+  desenhaMenuGame(); // chama a função para desenhar o menu
   return 0;
 }
